@@ -5,18 +5,7 @@ from Debug import Log, Assert
 import GenerateAns
 import pickle
 import time
-
-
-def judge(res1: ExeResult, res2: ExeResult) -> bool:
-    return res1 == res2
-
-
-def compare_test(list1: list, list2: list) -> bool:
-    Assert(len(list1) == len(list2), "两组测试的结果数目不一致")
-    for res1, res2 in zip(list1, list2):
-        if not judge(res1, res2):
-            return False
-    return True
+from compare_test_func import compare_test2 as compare_test
 
 
 def test_train_in_one_dir(path: str, test_num: int = -1, is_save_intermediate_file=False) -> None:
@@ -52,7 +41,7 @@ def test_train(path: str, test_num_in_one_dir: int = -1, is_save_intermediate_fi
         break
 
 
-def test_test(path: str, is_save_intermediate_file: bool = False):
+def test_test(path: str, is_save_intermediate_file: bool = False) -> None:
     Log("开始测试", path, "的数据")
     exe_res, compile_succ = dict(), 0
     exe = ExecuteCode(is_save_intermediate_file=is_save_intermediate_file)
@@ -78,7 +67,8 @@ def test_test(path: str, is_save_intermediate_file: bool = False):
         g.add(1 if compare_test(exe_res[t[0]], exe_res[t[1]]) else 0)
 
 
-def test_test_thread(path: str, thread_num: int, is_save_intermediate_file: bool = False):
+def test_test_thread(path: str, thread_num: int, is_save_intermediate_file: bool = False) -> None:
+    # 有bug，废弃
     Log(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     Log("开始测试", path, "的数据")
     exe = ExecuteCode(is_save_intermediate_file=is_save_intermediate_file)
