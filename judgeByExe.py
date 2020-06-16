@@ -70,7 +70,7 @@ def test_test(path: str, is_save_intermediate_file: bool = False):
     with open("build/save", "wb") as f:
         pickle.dump(exe_res, f)
 
-    g = GenerateAns.GenerateAns("ans.csvc", "sample_submission.csv")
+    g = GenerateAns.GenerateAns("ans.csv", "sample_submission.csv")
     while True:
         t = g.get()
         if t is None:
