@@ -50,7 +50,7 @@ def compare_test2(list1: list, list2: list) -> bool:
 
 
 def compare_test3(list1: list, list2: list) -> bool:
-    # 不考虑输入数量是否相同（效果不佳，会多出很多的1）
+    # 在2的基础上改不考虑输入数量是否相同（效果不佳，会多出很多的1）
     def judge(res_1: ExeResult, res_2: ExeResult) -> bool:
         if len(res_1.output.split()) != len(res_2.output.split()):
             return False
@@ -79,6 +79,74 @@ def compare_test3(list1: list, list2: list) -> bool:
         if not judge(res1, res2):
             return False
     return True
+
+
+def compare_test4(list1: list, list2: list) -> bool:
+    # 在2的基础上改，这次只要有一组输出正确且不是编译错误或运行错误，就会输出True(效果变差，0.69)
+    def judge(res_1: ExeResult, res_2: ExeResult) -> bool:
+        if res_1.input_times != res_2.input_times:
+            return False
+        if len(res_1.output.split()) != len(res_2.output.split()):
+            return False
+        for str1, str2 in zip(res_1.output.split(), res_2.output.split()):
+            d1 = str1.replace(".", "").isdigit()
+            d2 = str2.replace(".", "").isdigit()
+            if not d1 and not d2:
+                # 两个都不是数字
+                s1 = str1.replace("\n", "").replace("\r", "").replace(" ", "").replace("\t", "")
+                s2 = str2.replace("\n", "").replace("\r", "").replace(" ", "").replace("\t", "")
+                if s1 != s2:
+                    return False
+            elif d1 and d2:
+                if ("." in res_1.output and "." in res_2.output) or (
+                        "." not in res_1.output and "." not in res_2.output):
+                    if int(str1.replace(".", "")) != int(str2.replace(".", "")):
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        return True
+
+    Assert(len(list1) == len(list2), "两组测试的结果数目不一致")
+    for res1, res2 in zip(list1, list2):
+        if res1.result == 0 and res2.result == 0 and judge(res1, res2):
+            return True
+    return False
+
+
+def compare_test5(list1: list, list2: list) -> bool:
+    # 在2的基础上改，这次只要有一组输出正确且不是编译错误(不含运行错误)，就会输出True(效果变差,0.70)
+    def judge(res_1: ExeResult, res_2: ExeResult) -> bool:
+        if res_1.input_times != res_2.input_times:
+            return False
+        if len(res_1.output.split()) != len(res_2.output.split()):
+            return False
+        for str1, str2 in zip(res_1.output.split(), res_2.output.split()):
+            d1 = str1.replace(".", "").isdigit()
+            d2 = str2.replace(".", "").isdigit()
+            if not d1 and not d2:
+                # 两个都不是数字
+                s1 = str1.replace("\n", "").replace("\r", "").replace(" ", "").replace("\t", "")
+                s2 = str2.replace("\n", "").replace("\r", "").replace(" ", "").replace("\t", "")
+                if s1 != s2:
+                    return False
+            elif d1 and d2:
+                if ("." in res_1.output and "." in res_2.output) or (
+                        "." not in res_1.output and "." not in res_2.output):
+                    if int(str1.replace(".", "")) != int(str2.replace(".", "")):
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        return True
+
+    Assert(len(list1) == len(list2), "两组测试的结果数目不一致")
+    for res1, res2 in zip(list1, list2):
+        if res1.result != -1 and res2.result != -1 and judge(res1, res2):
+            return True
+    return False
 
 
 if __name__ == "__main__":
