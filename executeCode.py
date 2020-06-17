@@ -24,6 +24,12 @@ class ExeResult:
              self.input_times == other.input_times and
              self.result == other.result)
 
+    def __str__(self):
+        return \
+            "output: " + self.output.replace("\n", "\\n") + "\n" \
+            "input_times: " + str(self.input_times) + "\n" \
+            "result: " + str(self.result) + "\n"
+
 
 class ExecuteCode:
     work_path = "build"
@@ -41,6 +47,7 @@ class ExecuteCode:
     def __init__(self, is_save_intermediate_file: bool = False):
         self.is_save_intermediate_file = is_save_intermediate_file
         self.pattern = re.compile(r'VAR[0-9a-zA-Z_]*')
+        self.cin_get_pattern = re.compile(r'\n\s*cin.get\(\);')
 
     def pretreat_code(self, new_code: str) -> str:
         """
@@ -50,6 +57,7 @@ class ExecuteCode:
             使用long int这种比较少见的类型
             使用gets函数，但目前编译器不太支持了（替换成cin.getline）
             有未定义的变量（估计是由于宏定义被去掉了）
+            测试中出现大量cin.get()（通过cin.get不增加输入次数来部分解决）
         """
         var_list_str = ""
         """
@@ -59,6 +67,7 @@ class ExecuteCode:
         var_list_str += "\n"
         """
 
+        new_code = self.cin_get_pattern.sub("\nCIN_OBJ.get_not_increase_input_num();", new_code)
         new_code = self.code_file_front + var_list_str + new_code
         new_code = new_code.replace("void main()", "int main()")
         new_code = new_code.replace("void main(void)", "int main()")  # test/de362e91af0447e8
@@ -93,6 +102,7 @@ class ExecuteCode:
         if compile_result.returncode != 0:
             compile_succ = 0
             Warn(False, special_mask, "编译失败：", test_path, special_mask=special_mask)
+            return [ExeResult("", -1, -1) for _ in range(len(self.input_data))], 0
         else:
             compile_succ = 1
         # 运行代码，记录输入以及输出
@@ -158,4 +168,5 @@ if __name__ == "__main__":
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\02aa0e6caa544c72.txt"))  # while(cin)
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\f4d7dfe639d94661.txt"))  # 需要-1作为输入结束标志
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\f39d279f7e9e479c.txt"))  # cin用到了!=
-    execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\c0f1ea203fef4bc3.txt"))
+    execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\63bd49b5ad5a41e4.txt"))  # 出现大量无用的get.cin
+    # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\c0f1ea203fef4bc3.txt"))

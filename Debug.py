@@ -20,16 +20,25 @@ def blue(s: tuple) -> None:
     print("\033[34m", connect_str(s), "\033[0m")
 
 
+def green(s: tuple) -> None:
+    print("\033[32m", connect_str(s), "\033[0m")
+
+
 def yellow(s: tuple) -> None:
     print("\033[33m", connect_str(s), "\033[0m")
 
 
-def Log(*info: str, is_force_use: bool = False) -> None:
+def Log(*info, is_force_use: bool = False) -> None:
     if is_force_use or is_use_log:
         blue(info)
 
 
-def Warn(exp: bool, *info: str, is_make_invalid: bool = False, is_write_file: bool = True, special_mask: str = "") -> None:
+def GLog(*info, is_force_use: bool = False) -> None:
+    if is_force_use or is_use_log:
+        green(info)
+
+
+def Warn(exp: bool, *info, is_make_invalid: bool = False, is_write_file: bool = True, special_mask: str = "") -> None:
     if not exp and is_use_assert and not is_make_invalid:
         yellow(info)
         if is_write_file:
@@ -43,7 +52,7 @@ def Warn(exp: bool, *info: str, is_make_invalid: bool = False, is_write_file: bo
                     f.write(connect_str(info) + "\n")
 
 
-def Assert(exp: bool, *info: str, is_make_invalid: bool = False) -> None:
+def Assert(exp: bool, *info, is_make_invalid: bool = False) -> None:
     if not exp and is_use_assert and not is_make_invalid:
         red(info)
         assert False

@@ -80,10 +80,22 @@ public:
 	    return cin.get();
 	}
 
+	char get_not_increase_input_num(){
+	    // INPUT_NUM++;
+	    GET_INPUT_NUM;
+	    return cin.get();
+	}
+
 	void get(char &a){
 	    INPUT_NUM++;
 	    GET_INPUT_NUM;
 	    cin.get(a);
+	}
+
+	istream& get(char* s, streamsize n){
+	    INPUT_NUM++;
+	    GET_INPUT_NUM;
+	    return cin.get(s, n);
 	}
 } CIN_OBJ;
 

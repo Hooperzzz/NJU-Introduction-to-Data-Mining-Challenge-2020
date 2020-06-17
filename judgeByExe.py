@@ -1,11 +1,13 @@
+import random
+
 from executeCode import ExecuteCode, ExeResult
 import os
 import PathFunc
-from Debug import Log, Assert
+from Debug import Log, Assert, Warn, GLog
 import GenerateAns
 import pickle
 import time
-from compare_test_func import compare_test2 as compare_test
+from compareTestCsv import compare_test2 as compare_test
 
 
 def test_train_in_one_dir(path: str, test_num: int = -1, is_save_intermediate_file=False) -> None:
@@ -91,8 +93,61 @@ def test_test_thread(path: str, thread_num: int, is_save_intermediate_file: bool
     Log(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
 
+def test_train_random_from_same_dir(dir_path: str, test_num: int, is_save_intermediate_file: bool = False) -> None:
+    dir_list = os.listdir(dir_path)
+    dir_list_len = len(dir_list)
+    dir_file = []
+    for name in dir_list:
+        dir_file_list = os.listdir(os.path.join(dir_path, name))
+        dir_file.append([name, len(dir_file_list), dir_file_list])
+
+    exe = ExecuteCode(is_save_intermediate_file=is_save_intermediate_file)
+    for _ in range(test_num):
+        i = random.randint(0, dir_list_len-1)
+        j1 = random.randint(0, dir_file[i][1])
+        j2 = random.randint(0, dir_file[i][1])
+        Log("开始比较 ", dir_file[i][0], " 的 ", dir_file[i][2][j1], " 和 ", dir_file[i][2][j2])
+        p1 = PathFunc.join(dir_path, dir_file[i][0], dir_file[i][2][j1])
+        p2 = PathFunc.join(dir_path, dir_file[i][0], dir_file[i][2][j2])
+        ret_list1, _ = exe.execute_code(p1)
+        ret_list2, _ = exe.execute_code(p2)
+        if not compare_test(ret_list1, ret_list2):
+            GLog("文件不相同")
+            for r1, r2 in zip(ret_list1, ret_list2):
+                GLog(r1, r2)
+
+
+def test_train_random_from_different_dir(dir_path: str, test_num: int, is_save_intermediate_file: bool = False) -> None:
+    dir_list = os.listdir(dir_path)
+    dir_list_len = len(dir_list)
+    dir_file = []
+    for name in dir_list:
+        dir_file_list = os.listdir(os.path.join(dir_path, name))
+        dir_file.append([name, len(dir_file_list), dir_file_list])
+
+    exe = ExecuteCode(is_save_intermediate_file=is_save_intermediate_file)
+    for _ in range(test_num):
+        i1 = random.randint(0, dir_list_len-1)
+        j1 = random.randint(0, dir_file[i1][1])
+        i2 = random.randint(0, dir_list_len-1)
+        j2 = random.randint(0, dir_file[i2][1])
+        if i1 == i2:
+            continue
+        Log("开始比较 ", dir_file[i1][0], " 的 ", dir_file[i1][2][j1], " 和 ", dir_file[i2][0], " 的 ", dir_file[i2][2][j2])
+        p1 = PathFunc.join(dir_path, dir_file[i1][0], dir_file[i1][2][j1])
+        p2 = PathFunc.join(dir_path, dir_file[i2][0], dir_file[i2][2][j2])
+        ret_list1, _ = exe.execute_code(p1)
+        ret_list2, _ = exe.execute_code(p2)
+        if compare_test(ret_list1, ret_list2):
+            GLog("文件相同")
+            for r1, r2 in zip(ret_list1, ret_list2):
+                GLog(r1, r2)
+
+
 if __name__ == "__main__":
     # test_train_in_one_dir(PathFunc.to_windows("train\\train\\0ae1"), 30, True)
     # test_train(PathFunc.to_windows("train\\train"), 6, True)
     test_test("test/test", True)
     # test_test_thread("test/test", 4, True)
+    # test_train_random_from_same_dir("train/train", 100, True)
+    # test_train_random_from_different_dir("train/train", 100, True)
