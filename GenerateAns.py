@@ -9,7 +9,7 @@ class GenerateAns:
 
         self.temp1, self.temp2 = "", ""
 
-    def get(self):
+    def get(self) -> list:
         s = self.f.readline()
         if len(s) < 3:
             return None
