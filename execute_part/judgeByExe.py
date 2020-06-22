@@ -1,9 +1,9 @@
 import random
 
-from executeCode import ExecuteCode, ExeResult
+from executeCode import ExecuteCode
 import os
-import PathFunc
-from Debug import Log, Assert, Warn, GLog
+from execute_part import PathFunc
+from Debug import Log, GLog
 import GenerateAns
 import pickle
 import time
@@ -58,10 +58,10 @@ def test_test(path: str, is_save_intermediate_file: bool = False) -> None:
         break
     Log("编译成功数量：", compile_succ, "/", len(files))
 
-    with open("build/save", "wb") as f:
+    with open("build/execute_info", "wb") as f:
         pickle.dump(exe_res, f)
 
-    g = GenerateAns.GenerateAns("ans.csv", "sample_submission.csv")
+    g = GenerateAns.GenerateAns("../ans.csv", "sample_submission.csv")
     while True:
         t = g.get()
         if t is None:
@@ -80,10 +80,10 @@ def test_test_thread(path: str, thread_num: int, is_save_intermediate_file: bool
         break
     Log("编译成功数量：", compile_succ, "/", len(files))
 
-    with open("build/save", "wb") as f:
+    with open("build/execute_info", "wb") as f:
         pickle.dump(exe_res, f)
 
-    g = GenerateAns.GenerateAns("ans.csvc", "sample_submission.csv")
+    g = GenerateAns.GenerateAns("ans.csvc", "../sample_submission.csv")
     while True:
         t = g.get()
         if t is None:
@@ -145,9 +145,9 @@ def test_train_random_from_different_dir(dir_path: str, test_num: int, is_save_i
 
 
 if __name__ == "__main__":
-    # test_train_in_one_dir(PathFunc.to_windows("train\\train\\0ae1"), 30, True)
-    # test_train(PathFunc.to_windows("train\\train"), 6, True)
-    test_test("test/test", True)
+    # test_train_in_one_dir(PathFunc.to_windows("..\\train\\train\\0ae1"), 30, True)
+    # test_train(PathFunc.to_windows("..\\train\\train"), 6, True)
+    test_test("../test/test", True)
     # test_test_thread("test/test", 4, True)
-    # test_train_random_from_same_dir("train/train", 100, True)
-    # test_train_random_from_different_dir("train/train", 100, True)
+    # test_train_random_from_same_dir("../train/train", 100, True)
+    # test_train_random_from_different_dir("../train/train", 100, True)

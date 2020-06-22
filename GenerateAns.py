@@ -1,4 +1,9 @@
+from Debug import *
+
+
 class GenerateAns:
+    count = 0
+
     def __init__(self, ans_path: str, sample_path: str):
         self.ans_path = ans_path
         self.sample_path = sample_path
@@ -10,6 +15,8 @@ class GenerateAns:
         self.temp1, self.temp2 = "", ""
 
     def get(self) -> list:
+        self.count += 1
+        Log("当前进展", self.count)
         s = self.f.readline()
         if len(s) < 3:
             return None

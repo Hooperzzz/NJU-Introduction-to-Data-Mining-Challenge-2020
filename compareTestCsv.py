@@ -150,7 +150,7 @@ def compare_test5(list1: list, list2: list) -> bool:
 
 
 if __name__ == "__main__":
-    with open("save/save", "rb") as f:
+    with open("save/execute_info", "rb") as f:
         exe_res = pickle.load(f)
 
     g = GenerateAns.GenerateAns("ans.csvc", "sample_submission.csv")
