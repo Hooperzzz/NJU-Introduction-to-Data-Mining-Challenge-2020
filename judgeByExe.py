@@ -203,7 +203,7 @@ if __name__ == "__main__":
     # test_train_in_one_dir(PathFunc.to_windows(".\\train\\train\\0ae1"), 30, True)
     # test_train(PathFunc.to_windows(".\\train\\train"), 6, True)
     # test_test("./test/test", True)
-    # test_test_thread("test/test", 4, True)
-    test_train_random_from_same_dir("./train/train", 100, False)
-    # test_train_random_from_different_dir("./train/train", 100, False)
-    # get_num_of_succ_and_compilefail_and_runningfail("./build/execute_info")
+    # test_test_thread("test/test", 4, True) # 有bug，废弃
+    test_train_random_from_same_dir("./train/train", 100, False)  # 用于写报告的
+    # test_train_random_from_different_dir("./train/train", 100, False)  # 用于写报告的
+    # get_num_of_succ_and_compilefail_and_runningfail("./build/execute_info")  # 用于写报告的
