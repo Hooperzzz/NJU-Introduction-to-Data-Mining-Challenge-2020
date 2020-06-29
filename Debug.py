@@ -1,7 +1,10 @@
+import time
+
 is_use_log = True
 is_use_assert = True
+global_is_write_file = False
 
-warn_file_path = "build/warning_file"
+warn_file_path = "./build/warning_file"
 is_warn_file_init = dict()
 
 
@@ -30,6 +33,7 @@ def yellow(s: tuple) -> None:
 
 def Log(*info, is_force_use: bool = False) -> None:
     if is_force_use or is_use_log:
+        print("\033[34m", str(time.ctime()), "\033[0m", end=" ")
         blue(info)
 
 
@@ -41,7 +45,7 @@ def GLog(*info, is_force_use: bool = False) -> None:
 def Warn(exp: bool, *info, is_make_invalid: bool = False, is_write_file: bool = True, special_mask: str = "") -> None:
     if not exp and is_use_assert and not is_make_invalid:
         yellow(info)
-        if is_write_file:
+        if is_write_file and global_is_write_file:
             global is_warn_file_init
             if not is_warn_file_init.get(special_mask, False):
                 is_warn_file_init[special_mask] = True

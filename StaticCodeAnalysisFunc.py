@@ -42,6 +42,8 @@ def analysis_str(test1: str, test2: str, thresh: float = 0.5) -> bool:
         ret = set(str_list3)
         if "" in ret:
             ret.remove("")
+        # if "error" in ret:
+        #     ret.remove("error")
         return ret
 
     set1, set2 = get_str(code1), get_str(code2)

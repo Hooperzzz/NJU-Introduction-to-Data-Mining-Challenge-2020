@@ -4,7 +4,8 @@
 """
 import subprocess
 import traceback
-from execute_part import generateTest, PathFunc
+import PathFunc
+import generateTest
 from Debug import Log, Warn
 import re
 import threading
@@ -31,7 +32,7 @@ class ExeResult:
 
 
 class ExecuteCode:
-    work_path = "build"
+    work_path = "./build"
     intermediate_file_dir = work_path
 
     code_file_name = "test"
@@ -40,7 +41,8 @@ class ExecuteCode:
 
     input_data = [
         generateTest.get_repetition_test(1, 100),
-        generateTest.get_repetition_test(3, 100)
+        generateTest.get_repetition_test(3, 100),
+        generateTest.get_repetition_test(5, 100)
     ]
 
     def __init__(self, is_save_intermediate_file: bool = False):
@@ -167,5 +169,5 @@ if __name__ == "__main__":
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\02aa0e6caa544c72.txt"))  # while(cin)
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\f4d7dfe639d94661.txt"))  # 需要-1作为输入结束标志
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\f39d279f7e9e479c.txt"))  # cin用到了!=
-    execute_code.execute_code(PathFunc.to_linux(r"/test/test/63bd49b5ad5a41e4.txt"))  # 出现大量无用的get.cin
+    # execute_code.execute_code(PathFunc.to_linux(r"/test/test/63bd49b5ad5a41e4.txt"))  # 出现大量无用的get.cin
     # execute_code.execute_code(PathFunc.to_linux(r"D:\homework\data_mining\homework4\Code\test\test\c0f1ea203fef4bc3.txt"))
